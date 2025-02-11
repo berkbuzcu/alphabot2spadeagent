@@ -2,22 +2,20 @@ version: '3.8'
 
 services:
   prosody:
-    image: tobi312/prosody:latest
+    image: prosody/prosody:latest
     container_name: prosody
-    networks:
-      - xmpp_network
+    restart: unless-stopped
     ports:
-      - 5000:5000
-      - 5222:5222
-      - 5269:5269
-      - 5280:5280
-      - 5281:5281
-      - 5347:5347
+      - "5222:5222"  # XMPP client connections
+      - "5269:5269"  # Server-to-server connections
+      - "5280:5280"  # HTTP binding / BOSH (if enabled)
     volumes:
-      - ./prosody/entrypoint.d:/entrypoint.d:ro
-    environment:
-      TZ: "Europe/Berlin"
-      SELECT_COMMUNITY_MODULES: "mod_cloud_notify mod_csi mod_http_upload mod_lastlog mod_mam_muc mod_smacks"
+      - ./prosody-config:/etc/prosody   # Place your custom configuration files here
+      - ./prosody-data:/var/lib/prosody   # Persistent data storage
+    # Optional environment variables – adjust as needed for your image
+    # environment:
+    #   - PROSODY_DOMAIN=example.com
+    #   - PROSODY_ADMINS=admin@example.com
 
   agent:
     build: .
