@@ -2,9 +2,8 @@ version: '3.8'
 
 services:
   prosody:
-    image: prosody/prosody:latest
+    image: tobi312/prosody:latest
     container_name: prosody
-    restart: unless-stopped
     networks:
       - xmpp_network
     ports:
@@ -13,16 +12,20 @@ services:
       - "5280:5280"
       - "5347:5347"
     volumes:
-      - prosody_data:/var/lib/prosody
-      - prosody_config:/etc/prosody
-      - prosody_logs:/var/log/prosody
+      - ./prosody_data:/var/lib/prosody
+      - ./prosody_config/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua
+      - ./prosody_logs:/var/log/prosody
 
   agent:
     build: .
     container_name: agent
-    restart: unless-stopped
+    devices:
+      - /dev/gpiomem:/dev/gpiomem
     networks:
       - xmpp_network
+    privileged: true
+    cap_add:
+      - SYS_RAWIO
     depends_on:
       - prosody
     environment:

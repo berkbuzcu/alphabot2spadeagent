@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM dtcooper/raspberrypi-os:python3.9
 
 COPY ./agent /agent
 
