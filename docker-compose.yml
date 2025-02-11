@@ -7,14 +7,17 @@ services:
     networks:
       - xmpp_network
     ports:
-      - "5222:5222"
-      - "5269:5269"
-      - "5280:5280"
-      - "5347:5347"
+      - 5000:5000
+      - 5222:5222
+      - 5269:5269
+      - 5280:5280
+      - 5281:5281
+      - 5347:5347
     volumes:
-      - ./prosody_data:/var/lib/prosody
-      - ./prosody_config/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua
-      - ./prosody_logs:/var/log/prosody
+      - ./prosody/entrypoint.d:/entrypoint.d:ro
+    environment:
+      TZ: "Europe/Berlin"
+      SELECT_COMMUNITY_MODULES: "mod_cloud_notify mod_csi mod_http_upload mod_lastlog mod_mam_muc mod_smacks"
 
   agent:
     build: .
