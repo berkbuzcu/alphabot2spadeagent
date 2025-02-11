@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   prosody:
-    image: prosody/prosody:latest
+    build: ./prosody
     container_name: prosody
     restart: unless-stopped
     ports:
@@ -10,8 +10,8 @@ services:
       - "5269:5269"  # Server-to-server connections
       - "5280:5280"  # HTTP binding / BOSH (if enabled)
     volumes:
-      - ./prosody-config:/etc/prosody   # Place your custom configuration files here
-      - ./prosody-data:/var/lib/prosody   # Persistent data storage
+      - ./prosody/prosody-config:/etc/prosody   # Place your custom configuration files here
+      - ./prosody/prosody-data:/var/lib/prosody   # Persistent data storage
     # Optional environment variables – adjust as needed for your image
     # environment:
     #   - PROSODY_DOMAIN=example.com
